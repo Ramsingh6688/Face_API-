@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Request API Data</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 30px;
+        padding: 40px;
+        border: 3px solid #020202 ;
+        background-color: #b7abab;
+        border-radius: 20px;
+      }
+      .user {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      .user img {
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+      .support {
+        margin-top: 40px;
+        padding: 30px;
+        border: 3px solid #141313;
+        background-color: #a08a8a;
+        font-size: large;
+        border-radius: 15px;
+      }
+      #search-input {
+        border-radius: 10px;
+        padding: 8px 15px;
+      }
+      .search-name-bta {
+        border-radius: 10px;
+        padding: 8px 15px;
+        background-color: lightgreen;
+        border: none;
+        font-size: medium;
+      }
+     
+    </style>
+  </head>
+  <body>
+    
+    <div id="search-container">
+      <input type="text" id="search-input" placeholder="Search By Name" width="30x">
+      <button onclick="searchUser()" class="search-name-bta">Search Name</button>
+  </div>
+  
+  
+    <h1><u>Users </u></h1>
+    <div id="users"></div>
+    <div class="support" id="support"></div>
+
+    <script>
+      let usersData = [];
+      async function fetchData() {
+        try {
+          const response = await fetch("https://reqres.in/api/users?page=1");
+          const data = await response.json();
+          usersData = data
+          const usersDiv = document.getElementById("users");
+          console.log(data)
+          data.data.forEach((user) => {
+            const userDiv = document.createElement("div");
+            userDiv.classList.add("user");
+            userDiv.innerHTML = `
+                        <img src="${user.avatar}" alt="${user.first_name} ${user.last_name}" width="50">
+                        <div>
+                            <p><strong>${user?.first_name} ${user.last_name}</strong></p>
+                            <p>${user.email}</p>
+                        </div>
+                    `;
+            usersDiv.appendChild(userDiv);
+          });
+
+          const supportDiv = document.getElementById("support");
+          supportDiv.innerHTML = `
+                    <p>${data.support.text}</p>
+                    <a href="${data.support.url}">Support</a>
+                `;
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+      function searchUser() {
+        console.log("seahjplkd;fj")
+        console.log(usersData)
+        data = usersData.data
+        console.log(data)
+        const searchInput = document.getElementById('search-input').value.toLowerCase();
+        console.log(searchInput)
+        const filteredUsers = data.filter(user => 
+            user.first_name.toLowerCase().includes(searchInput) || 
+            user.last_name.toLowerCase().includes(searchInput)
+        );
+        console.log(filteredUsers)
+        displayUsers(filteredUsers);
+    }
+      fetchData();
+    </script>
+  </body>
+</html>
